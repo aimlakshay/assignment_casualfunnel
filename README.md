@@ -19,7 +19,7 @@ assignment/
 | Tracker   | Plain JavaScript (no dependencies), `localStorage`, `navigator.sendBeacon` |
 | Backend   | Node.js 18+, Express 4, Mongoose 8 |
 | Database  | MongoDB |
-| Dashboard | React 18, Vite 5 (no UI library), HTML canvas for the heatmap |
+| Dashboard | React 18, Vite 5, plain CSS (no UI library, light and dark themes), HTML canvas for the heatmap |
 
 ## Setup
 
@@ -27,7 +27,14 @@ assignment/
 
 - Node.js 18 or newer
 - A MongoDB database, either:
-  - local: `brew tap mongodb/brew && brew install mongodb-community && brew services start mongodb-community`, or
+  - local (macOS / Homebrew):
+    ```bash
+    brew tap mongodb/brew
+    brew trust mongodb/brew          # newer Homebrew versions require trusting third-party taps
+    brew install mongodb-community
+    brew services start mongodb/brew/mongodb-community
+    ```
+    or
   - a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster (copy its connection string)
 
 ### 1. Backend
@@ -55,8 +62,11 @@ npm run dev               # http://localhost:5173 (proxies /api to :4000)
 
 1. Open `http://localhost:4000/demo/`, click around, go to **Products**, add items to the cart.
 2. Open the dashboard at `http://localhost:5173`.
-   - **Sessions**: every session with its total event count. Click a row to see its events in order.
-   - **Heatmap**: pick a page URL to see where users clicked.
+   - **Sessions**: summary stats (sessions, events, page views, clicks) and a table of
+     every session with its total event count and duration. Click a row to see its user journey
+     as a timeline, in order, with the time between steps and click coordinates.
+   - **Heatmap**: pick a page URL to see where users clicked, as a **heat** gradient
+     (more clicks look hotter) or as individual **dots**, drawn over a preview of the page.
 
 ### Single-process mode (optional)
 
@@ -161,6 +171,13 @@ stored in a separate collection.
   events. A real deployment would add per-site keys, rate limits and bot filtering.
 - **No pagination** on the sessions list. That's fine at demo scale; a larger dataset would
   need pagination or a date range filter.
+
+## Troubleshooting
+
+- **Server hangs at startup or fails with `ECANCELED`** on macOS: if the project is inside
+  an iCloud-synced folder (Desktop or Documents with "Desktop & Documents Folders" on),
+  iCloud may hold files in `node_modules` while it syncs them. Wait for the sync to finish,
+  or keep the project in a folder that isn't synced, e.g. `~/code`.
 
 ## Deployment (optional)
 
