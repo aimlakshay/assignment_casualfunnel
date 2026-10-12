@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ShopDemo – Home</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Analytics tracking script -->
+    <script src="/tracker.js" async></script>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="logo" href="index.html">ShopDemo</a>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Everyday essentials, delivered.</h1>
+        <p>
+          This is a demo store used to test the analytics tracker. Every page view and
+          click on this site is sent to the backend and shows up in the dashboard.
+        </p>
+        <a class="btn" href="products.html">Shop products</a>
+        <button class="btn secondary" type="button" onclick="toast('Subscribed!')">
+          Subscribe to newsletter
+        </button>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h3>Free shipping</h3>
+          <p>On all orders over $50.</p>
+        </div>
+        <div class="card">
+          <h3>30-day returns</h3>
+          <p>Not happy? Send it back, no questions asked.</p>
+        </div>
+        <div class="card">
+          <h3>Support</h3>
+          <p>We're here to help 24/7.</p>
+          <button class="btn secondary" type="button" onclick="toast('Chat opened')">
+            Chat with us
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer>© ShopDemo – analytics demo page</footer>
+    <div id="toast"></div>
+
+    <script>
+      function toast(msg) {
+        var el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(function () {
+          el.classList.remove('show');
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ShopDemo – Products</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Analytics tracking script -->
+    <script src="/tracker.js" async></script>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="logo" href="index.html">ShopDemo</a>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Products</h1>
+        <p>Click around – add items to the cart, then check the heatmap in the dashboard.</p>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="img"></div>
+          <h3>Canvas Backpack</h3>
+          <div class="price">$49.00</div>
+          <button class="btn" type="button" onclick="addToCart('Canvas Backpack')">Add to cart</button>
+        </div>
+        <div class="card">
+          <div class="img"></div>
+          <h3>Steel Water Bottle</h3>
+          <div class="price">$19.00</div>
+          <button class="btn" type="button" onclick="addToCart('Steel Water Bottle')">Add to cart</button>
+        </div>
+        <div class="card">
+          <div class="img"></div>
+          <h3>Wireless Earbuds</h3>
+          <div class="price">$89.00</div>
+          <button class="btn" type="button" onclick="addToCart('Wireless Earbuds')">Add to cart</button>
+        </div>
+        <div class="card">
+          <div class="img"></div>
+          <h3>Desk Lamp</h3>
+          <div class="price">$34.00</div>
+          <button class="btn" type="button" onclick="addToCart('Desk Lamp')">Add to cart</button>
+        </div>
+        <div class="card">
+          <div class="img"></div>
+          <h3>Notebook Set</h3>
+          <div class="price">$12.00</div>
+          <button class="btn" type="button" onclick="addToCart('Notebook Set')">Add to cart</button>
+        </div>
+        <div class="card">
+          <div class="img"></div>
+          <h3>Running Cap</h3>
+          <div class="price">$22.00</div>
+          <button class="btn" type="button" onclick="addToCart('Running Cap')">Add to cart</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>© ShopDemo – analytics demo page</footer>
+    <div id="toast"></div>
+
+    <script>
+      function addToCart(name) {
+        var el = document.getElementById('toast');
+        el.textContent = name + ' added to cart';
+        el.classList.add('show');
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(function () {
+          el.classList.remove('show');
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>
