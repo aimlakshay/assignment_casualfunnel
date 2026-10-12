@@ -104,10 +104,10 @@ function drawHeat(ctx, points, width, height) {
   ctx.putImageData(image, 0, 0);
 }
 
-export default function HeatmapView() {
+export default function HeatmapView({ initialPage = '' }) {
   const [pages, setPages] = useState([]);
   const [pagesError, setPagesError] = useState('');
-  const [pageUrl, setPageUrl] = useState('');
+  const [pageUrl, setPageUrl] = useState(initialPage);
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);

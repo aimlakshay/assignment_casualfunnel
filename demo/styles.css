@@ -442,7 +442,9 @@ body.cart-open .cart-drawer {
 @media (max-width: 560px) {
   .wrap { padding: 0 16px; }
   .features, .products { grid-template-columns: 1fr; }
-  .nav a { padding: 8px; font-size: 14px; }
-  .cart-btn { padding: 8px 12px; }
-  .logo { font-size: 17px; }
+  .nav { gap: 2px; }
+  .nav a { padding: 8px 6px; font-size: 14px; }
+  .cart-btn { padding: 8px 10px; margin-left: 4px; }
+  .cart-label { display: none; }
+  .logo { font-size: 17px; gap: 8px; }
 }

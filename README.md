@@ -9,7 +9,7 @@ assignment/
 ├── tracker/tracker.js   # JavaScript tracking snippet added to any webpage
 ├── demo/                # Demo store (home + products, working cart) with the tracker installed
 ├── backend/             # Node.js + Express API, MongoDB via Mongoose
-└── dashboard/           # React (Vite) dashboard: Sessions view + Heatmap view
+└── dashboard/           # React (Vite) dashboard: Overview, Sessions, Heatmap (password protected)
 ```
 
 ## Tech stack
@@ -41,7 +41,7 @@ assignment/
 
 ```bash
 cd backend
-cp .env.example .env      # set MONGODB_URI if not using local MongoDB
+cp .env.example .env      # set MONGODB_URI and DASHBOARD_PASSWORD
 npm install
 npm start                 # http://localhost:4000
 ```
@@ -64,7 +64,12 @@ npm run dev               # http://localhost:5173 (proxies /api to :4000)
    cart. The **Cart** button in the header opens a drawer where you can change quantities,
    remove items and check out (demo only: nothing is charged). The cart is kept in
    `localStorage`, so it carries over between pages.
-2. Open the dashboard at `http://localhost:5173`.
+2. Open the dashboard at `http://localhost:5173` and sign in with the `DASHBOARD_PASSWORD`
+   from `backend/.env`.
+   - **Overview**: KPI tiles with trend lines (sessions, page views, clicks, average session
+     length), a traffic chart per hour/day with a table view, sessions by device (from screen
+     width), and the most popular pages with a shortcut to each page's heatmap. Ranges: 24 hours,
+     7 days, 30 days, all time.
    - **Sessions**: summary stats (sessions, events, page views, clicks) and a table of
      every session with its total event count and duration. Click a row to see its user journey
      as a timeline, in order, with the time between steps and click coordinates.
@@ -111,7 +116,14 @@ Base URL: `http://localhost:4000`
 | `GET`  | `/api/sessions/:sessionId/events` | All events of a session in chronological order (the user journey). |
 | `GET`  | `/api/heatmap?page_url=<url>` | Click data (`x`, `y`, dimensions) for one page. |
 | `GET`  | `/api/pages` | Distinct tracked page URLs with click counts (used by the heatmap page picker). |
+| `GET`  | `/api/stats?range=24h\|7d\|30d\|all&tz=<IANA zone>` | Overview data: totals, traffic per hour/day, devices, top pages. |
+| `GET`  | `/api/auth/status` | Whether a password is required and whether the sent token is valid. |
+| `POST` | `/api/auth/login` | `{ "password": "..." }` → `{ token, expires_at }` (token valid for 12 hours). |
 | `GET`  | `/api/health` | Server and database status. |
+
+When `DASHBOARD_PASSWORD` is set, every `GET` data endpoint above (sessions, events, pages,
+heatmap, stats) requires an `Authorization: Bearer <token>` header from `/api/auth/login`.
+`POST /api/events` stays public so the tracker works on any website.
 
 Example:
 
@@ -171,8 +183,14 @@ stored in a separate collection.
   `X-Frame-Options`/CSP `frame-ancestors` will show a blank background, but the dots still render.
 - **Timestamps** come from the client clock, which keeps journey ordering true to what the
   user did. The server also stores `received_at`.
-- **No auth or rate limiting** on the ingestion endpoint. Anyone with the URL can post
-  events. A real deployment would add per-site keys, rate limits and bot filtering.
+- **Dashboard login is a single shared password** (`DASHBOARD_PASSWORD`), not user
+  accounts. Tokens are signed with HMAC-SHA256, expire after 12 hours, and are kept in the
+  browser's `localStorage`. Login attempts are limited to 10 per 15 minutes per IP. Leaving
+  `DASHBOARD_PASSWORD` empty turns the login off.
+- **The ingestion endpoint is public**, as it must be for a tracking script: anyone with the
+  URL can post events. A real deployment would add per-site keys, rate limits and bot filtering.
+- **Device type is inferred from screen width** (under 768px mobile, under 1024px tablet,
+  otherwise desktop), using the widest viewport seen in the session. No user-agent parsing.
 - **No pagination** on the sessions list. That's fine at demo scale; a larger dataset would
   need pagination or a date range filter.
 
@@ -180,8 +198,8 @@ stored in a separate collection.
 
 - **Server hangs at startup or fails with `ECANCELED`** on macOS: if the project is inside
   an iCloud-synced folder (Desktop or Documents with "Desktop & Documents Folders" on),
-  iCloud may hold files in `node_modules` while it syncs them. Wait for the sync to finish,
-  or keep the project in a folder that isn't synced, e.g. `~/code`.
+  iCloud slows down or blocks reads of the thousands of files in `node_modules`. Keep the
+  project in a folder that isn't synced, e.g. clone it into `~/code`.
 
 ## Deployment on Render
 
@@ -196,7 +214,8 @@ web service. That service serves the dashboard (`/`), the API (`/api/*`), the tr
      the `?`, e.g. `mongodb+srv://USER:PASS@cluster0.xxxxx.mongodb.net/user_analytics?retryWrites=true&w=majority`
 2. **Render**
    - *New → Blueprint*, connect this GitHub repo.
-   - When asked for `MONGODB_URI`, paste the Atlas connection string, then click *Apply*.
+   - When asked for `MONGODB_URI`, paste the Atlas connection string; for
+     `DASHBOARD_PASSWORD`, choose the password for the dashboard. Then click *Apply*.
    - Render runs `npm run build` (installs both apps and builds the dashboard) and
      `npm start` (starts the Express server), and uses `/api/health` as the health check.
 3. Open `https://<your-service>.onrender.com/demo/`, click around, then open
