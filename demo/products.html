@@ -4,80 +4,131 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ShopDemo – Products</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <!-- Analytics tracking script -->
     <script src="/tracker.js" async></script>
   </head>
   <body>
-    <header>
+    <header class="site-header">
       <div class="wrap">
-        <a class="logo" href="index.html">ShopDemo</a>
-        <nav>
+        <a class="logo" href="index.html"><span class="logo-mark">S</span>ShopDemo</a>
+        <nav class="nav">
           <a href="index.html">Home</a>
-          <a href="products.html">Products</a>
+          <a href="products.html" class="active">Products</a>
+          <button type="button" class="cart-btn" data-open-cart aria-label="Open cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Cart
+            <span id="cart-count" class="cart-count" hidden>0</span>
+          </button>
         </nav>
       </div>
     </header>
 
-    <main>
-      <section class="hero">
-        <h1>Products</h1>
-        <p>Click around – add items to the cart, then check the heatmap in the dashboard.</p>
+    <main class="wrap">
+      <section class="page-head">
+        <h1>All products</h1>
+        <p>Add items to your cart, then check the heatmap in the dashboard.</p>
       </section>
 
-      <section class="grid">
-        <div class="card">
-          <div class="img">🎒</div>
-          <h3>Canvas Backpack</h3>
-          <div class="price">$49.00</div>
-          <button class="btn" type="button" onclick="addToCart('Canvas Backpack')">Add to cart</button>
-        </div>
-        <div class="card">
-          <div class="img">🧴</div>
-          <h3>Steel Water Bottle</h3>
-          <div class="price">$19.00</div>
-          <button class="btn" type="button" onclick="addToCart('Steel Water Bottle')">Add to cart</button>
-        </div>
-        <div class="card">
-          <div class="img">🎧</div>
-          <h3>Wireless Earbuds</h3>
-          <div class="price">$89.00</div>
-          <button class="btn" type="button" onclick="addToCart('Wireless Earbuds')">Add to cart</button>
-        </div>
-        <div class="card">
-          <div class="img">💡</div>
-          <h3>Desk Lamp</h3>
-          <div class="price">$34.00</div>
-          <button class="btn" type="button" onclick="addToCart('Desk Lamp')">Add to cart</button>
-        </div>
-        <div class="card">
-          <div class="img">📓</div>
-          <h3>Notebook Set</h3>
-          <div class="price">$12.00</div>
-          <button class="btn" type="button" onclick="addToCart('Notebook Set')">Add to cart</button>
-        </div>
-        <div class="card">
-          <div class="img">🧢</div>
-          <h3>Running Cap</h3>
-          <div class="price">$22.00</div>
-          <button class="btn" type="button" onclick="addToCart('Running Cap')">Add to cart</button>
-        </div>
+      <section class="products">
+        <article class="product">
+          <div class="product-img">🎒</div>
+          <div class="product-body">
+            <span class="tag">Bags</span>
+            <h3>Canvas Backpack</h3>
+            <p class="desc">Water-resistant canvas, padded laptop sleeve.</p>
+            <div class="product-foot">
+              <span class="price">$49.00</span>
+              <button class="btn primary small" type="button" data-add-to-cart="backpack">Add to cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product">
+          <div class="product-img">🧴</div>
+          <div class="product-body">
+            <span class="tag">Outdoor</span>
+            <h3>Steel Water Bottle</h3>
+            <p class="desc">Keeps drinks cold for 24 hours.</p>
+            <div class="product-foot">
+              <span class="price">$19.00</span>
+              <button class="btn primary small" type="button" data-add-to-cart="bottle">Add to cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product">
+          <div class="product-img">🎧</div>
+          <div class="product-body">
+            <span class="tag">Audio</span>
+            <h3>Wireless Earbuds</h3>
+            <p class="desc">Noise cancelling, 30-hour battery.</p>
+            <div class="product-foot">
+              <span class="price">$89.00</span>
+              <button class="btn primary small" type="button" data-add-to-cart="earbuds">Add to cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product">
+          <div class="product-img">💡</div>
+          <div class="product-body">
+            <span class="tag">Home</span>
+            <h3>Desk Lamp</h3>
+            <p class="desc">Dimmable LED with warm and cool modes.</p>
+            <div class="product-foot">
+              <span class="price">$34.00</span>
+              <button class="btn primary small" type="button" data-add-to-cart="lamp">Add to cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product">
+          <div class="product-img">📓</div>
+          <div class="product-body">
+            <span class="tag">Stationery</span>
+            <h3>Notebook Set</h3>
+            <p class="desc">Three dotted A5 notebooks.</p>
+            <div class="product-foot">
+              <span class="price">$12.00</span>
+              <button class="btn primary small" type="button" data-add-to-cart="notebook">Add to cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product">
+          <div class="product-img">🧢</div>
+          <div class="product-body">
+            <span class="tag">Apparel</span>
+            <h3>Running Cap</h3>
+            <p class="desc">Lightweight and breathable.</p>
+            <div class="product-foot">
+              <span class="price">$22.00</span>
+              <button class="btn primary small" type="button" data-add-to-cart="cap">Add to cart</button>
+            </div>
+          </div>
+        </article>
       </section>
     </main>
 
-    <footer>© ShopDemo – analytics demo page</footer>
-    <div id="toast"></div>
+    <footer class="site-footer">
+      <div class="wrap">© ShopDemo · analytics demo store</div>
+    </footer>
 
-    <script>
-      function addToCart(name) {
-        var el = document.getElementById('toast');
-        el.textContent = name + ' added to cart';
-        el.classList.add('show');
-        clearTimeout(window.__toastTimer);
-        window.__toastTimer = setTimeout(function () {
-          el.classList.remove('show');
-        }, 1500);
-      }
-    </script>
+    <!-- Cart drawer -->
+    <div class="cart-backdrop" data-close-cart></div>
+    <aside class="cart-drawer" aria-label="Shopping cart">
+      <div class="cart-head">
+        <h2>Your cart</h2>
+        <button type="button" class="icon-btn" data-close-cart aria-label="Close cart">✕</button>
+      </div>
+      <div id="cart-items" class="cart-items"></div>
+      <div class="cart-foot">
+        <div class="cart-total-row"><span>Subtotal</span><strong id="cart-total">$0.00</strong></div>
+        <button type="button" id="cart-checkout" class="btn primary block">Checkout</button>
+        <p class="cart-note">Demo store: no payment is taken.</p>
+      </div>
+    </aside>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="cart.js"></script>
   </body>
 </html>

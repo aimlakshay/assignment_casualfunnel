@@ -69,9 +69,9 @@
   }
 
   // Page URL without query string or hash, so heatmap data for a page isn't
-  // split across ?utm=... variants.
+  // split across ?utm=... variants. "/dir/index.html" is reported as "/dir/".
   function currentPageUrl() {
-    return window.location.origin + window.location.pathname;
+    return window.location.origin + window.location.pathname.replace(/\/index\.html?$/, '/');
   }
 
   function dimensions() {

@@ -7,7 +7,7 @@ click heatmap for each page.
 ```
 assignment/
 ├── tracker/tracker.js   # JavaScript tracking snippet added to any webpage
-├── demo/                # Demo store (2 pages) with the tracker installed
+├── demo/                # Demo store (home + products, working cart) with the tracker installed
 ├── backend/             # Node.js + Express API, MongoDB via Mongoose
 └── dashboard/           # React (Vite) dashboard: Sessions view + Heatmap view
 ```
@@ -60,7 +60,10 @@ npm run dev               # http://localhost:5173 (proxies /api to :4000)
 
 ### 3. Try it
 
-1. Open `http://localhost:4000/demo/`, click around, go to **Products**, add items to the cart.
+1. Open `http://localhost:4000/demo/`, click around, go to **Products** and add items to the
+   cart. The **Cart** button in the header opens a drawer where you can change quantities,
+   remove items and check out (demo only: nothing is charged). The cart is kept in
+   `localStorage`, so it carries over between pages.
 2. Open the dashboard at `http://localhost:5173`.
    - **Sessions**: summary stats (sessions, events, page views, clicks) and a table of
      every session with its total event count and duration. Click a row to see its user journey
@@ -149,7 +152,8 @@ stored in a separate collection.
   **30 minutes of inactivity**. It is shared across tabs of the same origin and does not
   follow the user across different domains (the assignment allowed cookie or localStorage).
 - **Page URL normalization**: the query string and hash are removed (`origin + pathname`),
-  so `/products?utm_source=x` and `/products` share one heatmap. Single-page apps that
+  and a trailing `index.html` is dropped, so `/products?utm_source=x` and `/products` share
+  one heatmap, and so do `/demo/index.html` and `/demo/`. Single-page apps that
   change routes without reloading only record the first `page_view`. Route-change tracking
   was left out to keep the scope as specified.
 - **Sending events**: each event is sent right away with `navigator.sendBeacon` (falling
@@ -179,13 +183,24 @@ stored in a separate collection.
   iCloud may hold files in `node_modules` while it syncs them. Wait for the sync to finish,
   or keep the project in a folder that isn't synced, e.g. `~/code`.
 
-## Deployment (optional)
+## Deployment on Render
 
-One way to host it:
-1. Create a free MongoDB Atlas cluster and copy its connection string.
-2. Deploy the repo to Render/Railway as a Node web service:
-   - Build command: `cd dashboard && npm install && npm run build && cd ../backend && npm install`
-   - Start command: `cd backend && npm start`
-   - Environment: `MONGODB_URI=<atlas connection string>`
-3. The same service then serves the dashboard (`/`), the API (`/api/*`), the tracker
-   (`/tracker.js`) and the demo site (`/demo/`).
+The repo includes a Render Blueprint ([`render.yaml`](render.yaml)) that creates one free
+web service. That service serves the dashboard (`/`), the API (`/api/*`), the tracker
+(`/tracker.js`) and the demo store (`/demo/`).
+
+1. **MongoDB Atlas** (free M0 cluster)
+   - Create a cluster, then a database user under *Database Access*.
+   - Under *Network Access*, allow `0.0.0.0/0`, because Render's outbound IPs change.
+   - Copy the connection string (*Connect → Drivers*) and add the database name before
+     the `?`, e.g. `mongodb+srv://USER:PASS@cluster0.xxxxx.mongodb.net/user_analytics?retryWrites=true&w=majority`
+2. **Render**
+   - *New → Blueprint*, connect this GitHub repo.
+   - When asked for `MONGODB_URI`, paste the Atlas connection string, then click *Apply*.
+   - Render runs `npm run build` (installs both apps and builds the dashboard) and
+     `npm start` (starts the Express server), and uses `/api/health` as the health check.
+3. Open `https://<your-service>.onrender.com/demo/`, click around, then open
+   `https://<your-service>.onrender.com/` to see the dashboard.
+
+Free Render services go to sleep after about 15 minutes without traffic, so the first
+request after that can take up to a minute.

@@ -1,0 +1,16 @@
+# Render Blueprint: one web service that serves the API, the dashboard,
+# the tracking script (/tracker.js) and the demo site (/demo/).
+services:
+  - type: web
+    name: user-analytics
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # MongoDB Atlas connection string; Render asks for it when the Blueprint is created.
+      - key: MONGODB_URI
+        sync: false

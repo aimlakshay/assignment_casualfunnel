@@ -4,69 +4,132 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ShopDemo – Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <!-- Analytics tracking script -->
     <script src="/tracker.js" async></script>
   </head>
   <body>
-    <header>
+    <header class="site-header">
       <div class="wrap">
-        <a class="logo" href="index.html">ShopDemo</a>
-        <nav>
-          <a href="index.html">Home</a>
+        <a class="logo" href="index.html"><span class="logo-mark">S</span>ShopDemo</a>
+        <nav class="nav">
+          <a href="index.html" class="active">Home</a>
           <a href="products.html">Products</a>
+          <button type="button" class="cart-btn" data-open-cart aria-label="Open cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Cart
+            <span id="cart-count" class="cart-count" hidden>0</span>
+          </button>
         </nav>
       </div>
     </header>
 
-    <main>
-      <section class="hero home">
-        <h1>Everyday essentials, delivered.</h1>
-        <p>
-          This is a demo store used to test the analytics tracker. Every page view and
-          click on this site is sent to the backend and shows up in the dashboard.
-        </p>
-        <a class="btn" href="products.html">Shop products</a>
-        <button class="btn secondary" type="button" onclick="toast('Subscribed!')">
-          Subscribe to newsletter
-        </button>
+    <main class="wrap">
+      <section class="hero">
+        <div class="hero-text">
+          <span class="eyebrow">New season · Free shipping over $50</span>
+          <h1>Everyday essentials, <span class="grad">delivered.</span></h1>
+          <p>
+            This is a demo store for testing the analytics tracker. Every page view and click
+            here is sent to the backend and shows up in the dashboard.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="products.html">Shop products →</a>
+            <button class="btn ghost" type="button" onclick="toast('📬 Subscribed to the newsletter')">
+              Subscribe to newsletter
+            </button>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <span>🎒</span><span>🎧</span><span>💡</span><span>🧢</span>
+        </div>
       </section>
 
-      <section class="grid">
-        <div class="card">
-          <div class="icon">🚚</div>
+      <section class="features">
+        <div class="feature">
+          <div class="feature-icon">🚚</div>
           <h3>Free shipping</h3>
           <p>On all orders over $50.</p>
         </div>
-        <div class="card">
-          <div class="icon">↩️</div>
+        <div class="feature">
+          <div class="feature-icon">↩️</div>
           <h3>30-day returns</h3>
           <p>Not happy? Send it back, no questions asked.</p>
         </div>
-        <div class="card">
-          <div class="icon">💬</div>
+        <div class="feature">
+          <div class="feature-icon">💬</div>
           <h3>Support</h3>
           <p>We're here to help 24/7.</p>
-          <button class="btn secondary" type="button" onclick="toast('Chat opened')">
-            Chat with us
-          </button>
+          <button class="btn small soft" type="button" onclick="toast('💬 Chat opened')">Chat with us</button>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Bestsellers</h2>
+          <a href="products.html" class="link">View all →</a>
+        </div>
+        <div class="products">
+          <article class="product">
+            <div class="product-img">🎧</div>
+            <div class="product-body">
+              <span class="tag">Audio</span>
+              <h3>Wireless Earbuds</h3>
+              <div class="product-foot">
+                <span class="price">$89.00</span>
+                <button class="btn primary small" type="button" data-add-to-cart="earbuds">Add to cart</button>
+              </div>
+            </div>
+          </article>
+          <article class="product">
+            <div class="product-img">🎒</div>
+            <div class="product-body">
+              <span class="tag">Bags</span>
+              <h3>Canvas Backpack</h3>
+              <div class="product-foot">
+                <span class="price">$49.00</span>
+                <button class="btn primary small" type="button" data-add-to-cart="backpack">Add to cart</button>
+              </div>
+            </div>
+          </article>
+          <article class="product">
+            <div class="product-img">💡</div>
+            <div class="product-body">
+              <span class="tag">Home</span>
+              <h3>Desk Lamp</h3>
+              <div class="product-foot">
+                <span class="price">$34.00</span>
+                <button class="btn primary small" type="button" data-add-to-cart="lamp">Add to cart</button>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
     </main>
 
-    <footer>© ShopDemo – analytics demo page</footer>
-    <div id="toast"></div>
+    <footer class="site-footer">
+      <div class="wrap">© ShopDemo · analytics demo store</div>
+    </footer>
 
-    <script>
-      function toast(msg) {
-        var el = document.getElementById('toast');
-        el.textContent = msg;
-        el.classList.add('show');
-        clearTimeout(window.__toastTimer);
-        window.__toastTimer = setTimeout(function () {
-          el.classList.remove('show');
-        }, 1500);
-      }
-    </script>
+    <!-- Cart drawer -->
+    <div class="cart-backdrop" data-close-cart></div>
+    <aside class="cart-drawer" aria-label="Shopping cart">
+      <div class="cart-head">
+        <h2>Your cart</h2>
+        <button type="button" class="icon-btn" data-close-cart aria-label="Close cart">✕</button>
+      </div>
+      <div id="cart-items" class="cart-items"></div>
+      <div class="cart-foot">
+        <div class="cart-total-row"><span>Subtotal</span><strong id="cart-total">$0.00</strong></div>
+        <button type="button" id="cart-checkout" class="btn primary block">Checkout</button>
+        <p class="cart-note">Demo store: no payment is taken.</p>
+      </div>
+    </aside>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="cart.js"></script>
   </body>
 </html>

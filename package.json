@@ -1,0 +1,13 @@
+{
+  "name": "user-analytics-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tracks page views and clicks and shows sessions and heatmaps in a dashboard",
+  "scripts": {
+    "build": "npm ci --prefix backend && npm ci --prefix dashboard --include=dev && npm run build --prefix dashboard",
+    "start": "npm start --prefix backend"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
